@@ -7,8 +7,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-int nResources,
-    nProcesses;
+int nResources,nProcesses;
 int *resources;
 int **allocated;
 int **maxRequired;
@@ -65,5 +64,32 @@ int main(int argc, char** argv) {
                         scanf("%d", &maxRequired[i][j]);
         }
         printf("\n");
+        // calculate need matrix
+        need = (int **)malloc(nProcesses * sizeof(*need));
+        for(i=0; i<nProcesses; i++)
+                need[i] = (int *)malloc(nResources * sizeof(**need));
 
+        for(i=0; i<nProcesses; i++)
+                {
+				int j;
+				for(j=0; j<nResources; j++)
+                        need[i][j] = maxRequired[i][j] - allocated[i][j];
+}
+	// get safe sequence
+	safeSeq = (int *)malloc(nProcesses * sizeof(*safeSeq));
+        for(i=0; i<nProcesses; i++) safeSeq[i] = -1;
+
+        if(!getSafeSeq()) {
+                printf("\nUnsafe State! The processes leads the system to a unsafe state.\n\n");
+                exit(-1);
+        }
+
+        printf("\n\nSafe Sequence Found : ");
+        for(i=0; i<nProcesses; i++) {
+                printf("%-3d", safeSeq[i]+1);
+        }
+
+        printf("\nExecuting Processes...\n\n");
+        sleep(1); 
 	}
+	
